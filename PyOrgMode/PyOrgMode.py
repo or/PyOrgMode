@@ -81,7 +81,7 @@ class OrgDate:
         # We ignore weekdays (e.g. "Mon", "Tue") because a single org file
         # could mix dates in many locales, e.g. if it was edited through
         # many compters, each with a different language
-        PARSE_WEEKDAYS=False
+        PARSE_WEEKDAYS = False
 
         if s.group('time'):
             if weekday_suffix == "" or not PARSE_WEEKDAYS:
@@ -308,7 +308,7 @@ class OrgElement:
 
     def output(self):
         """ Wrapper for the text output. """
-        return self.indent+self._output()
+        return self.indent + self._output()
 
     def _output(self):
         """ This is the function really used by the plugin. """
@@ -435,11 +435,11 @@ class OrgSchedule(OrgPlugin):
             <2010-10-10 10:10>)"""
             output = ""
             if self.type & self.SCHEDULED:
-                output = output + "SCHEDULED: "+self.scheduled.get_value()+" "
+                output = output + "SCHEDULED: " + self.scheduled.get_value() + " "
             if self.type & self.DEADLINE:
-                output = output + "DEADLINE: "+self.deadline.get_value()+" "
+                output = output + "DEADLINE: " + self.deadline.get_value() + " "
             if self.type & self.CLOSED:
-                output = output + "CLOSED: "+self.closed.get_value()+" "
+                output = output + "CLOSED: " + self.closed.get_value() + " "
             if output != "":
                 output = output.rstrip() + "\n"
             return output
@@ -502,7 +502,7 @@ class OrgDrawer(OrgPlugin):
 
 
 class OrgTable(OrgPlugin):
-    """A plugin for table managment"""
+    """A plugin for table management"""
     def __init__(self):
         OrgPlugin.__init__(self)
         self.regexp = re.compile(r"^\s*\|")
@@ -608,7 +608,7 @@ class OrgNode(OrgPlugin):
 
     def _close(self, current):
         # Add the last node
-        if (current.level > 0) and current.parent:
+        if current.level > 0 and current.parent:
             current.parent.append(current)
 
     class Element(OrgElement):
@@ -626,8 +626,8 @@ class OrgNode(OrgPlugin):
             self.tags = []
             # TODO  Scheduling structure
 
-        def get_all_tags(self, use_tag_inheritance = True,
-                         tags_exclude_from_inheritance = []):
+        def get_all_tags(self, use_tag_inheritance=True,
+                         tags_exclude_from_inheritance=[]):
             """Retrieve all tags applicable to this node, including those inherited from
             parents or the document itself.
 
@@ -681,7 +681,7 @@ class OrgNode(OrgPlugin):
             output = ""
 
             if hasattr(self, "level"):
-                output = output + "*"*self.level
+                output = output + "*" * self.level
 
             if hasattr(self, "todo"):
                 output = output + " " + self.todo
@@ -726,8 +726,7 @@ class OrgNode(OrgPlugin):
                 for child in element.content:
                     if hasattr(child, "parent"):
                         child.parent = element
-                        self.reparent_cleanlevels(child,
-                                                  level+1)
+                        self.reparent_cleanlevels(child, level + 1)
 
 
 class OrgFileTags(OrgPlugin):
@@ -896,8 +895,8 @@ class OrgDataStructure(OrgElement):
             for possible_state in todo_list:
                 if possible_state not in self.get_todo_states("all"):
                     raise ValueError(
-                        "State " + possible_state
-                        + " not registered. See \
+                        "State " + possible_state +
+                        " not registered. See \
                         PyOrgMode.OrgDataStructure.add_todo_state.")
         results_list = []
         # Recursive function that steps through each node in current level,
@@ -938,9 +937,9 @@ class OrgDataStructure(OrgElement):
         if form == "file":
             content = open(name, 'r')
         elif form == "string":
-            content = [tmp+"\n" for tmp in name.split("\n")]
+            content = [tmp + "\n" for tmp in name.split("\n")]
         else:
-            raise ValueError("Form \""+form+"\" not recognized")
+            raise ValueError("Form \"" + form + "\" not recognized")
 
         for line in content:
             for plugin in self.plugins:
