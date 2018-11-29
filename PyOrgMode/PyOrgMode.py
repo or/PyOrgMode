@@ -45,11 +45,11 @@ class OrgDate:
     CLOCKED = 128
 
     # TODO: Timestamp with repeater interval
-    DICT_RE = {'start': '[[<]',
-               'end':   '[]>]',
+    DICT_RE = {'start': r'[[<]',
+               'end':   r'[]>]',
                'date':  r'([0-9]{4})-([0-9]{2})-([0-9]{2})(\s+([\w.]+))?',
-               'time':  '([0-9]{2}):([0-9]{2})',
-               'clock': '([0-9]{1}):([0-9]{2})',
+               'time':  r'([0-9]{2}):([0-9]{2})',
+               'clock': r'([0-9]{1}):([0-9]{2})',
                'repeat': r'[\+\.]{1,2}\d+[dwmy]'}
 
     def __init__(self, value=None):
@@ -63,7 +63,7 @@ class OrgDate:
         Parses an org-mode date time string.
         Returns (timed, weekdayed, time_struct, repeat).
         """
-        search_re = r'r(?P<date>{date})(\s+(?P<time>{time}))?'.format(
+        search_re = r'(?P<date>{date})(\s+(?P<time>{time}))?'.format(
             **self.DICT_RE)
         s = re.search(search_re, s)
 
@@ -119,7 +119,7 @@ class OrgDate:
 
         # time range on a single day
         search_re = (r'{start}(?P<date>{date})\s+(?P<time1>{time})'
-                     '-(?P<time2>{time}){end}').format(**self.DICT_RE)
+                     r'-(?P<time2>{time}){end}').format(**self.DICT_RE)
         match = re.search(search_re, value)
 
         if match:
@@ -167,7 +167,7 @@ class OrgDate:
             self.end = None
             return
         # clocked time
-        search_re = '(?P<clocked>{clock})'.format(**self.DICT_RE)
+        search_re = r'(?P<clocked>{clock})'.format(**self.DICT_RE)
         match = re.search(search_re, value)
         if match:
             self.value = value
@@ -344,8 +344,8 @@ class OrgClock(OrgPlugin):
     def __init__(self):
         OrgPlugin.__init__(self)
         self.regexp = re.compile(
-            r"(?:\s*)CLOCK:(?:\s*)((?:<|\[).*(?:>||\]))--\
-            ((?:<|\[).*(?:>||\])).+=>\s*(.*)")
+            r"(?:\s*)CLOCK:(?:\s*)((?:<|\[).*(?:>||\]))--"
+            r"((?:<|\[).*(?:>||\])).+=>\s*(.*)")
 
     def _treat(self, current, line):
         clocked = self.regexp.findall(line)
